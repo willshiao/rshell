@@ -1,0 +1,11 @@
+#ifndef RSHELL_STATUS_CODE_H
+#define RSHELL_STATUS_CODE_H
+
+enum StatusCode {
+  SUCCESS,
+  PERMISSION_ERROR,
+  IO_ERROR,
+  UNKNOWN_ERROR
+};
+
+#endif
