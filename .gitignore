@@ -28,6 +28,6 @@
 *.out
 *.app
 
-bin
+bin/rshell
 *.sublime-project
 *.sublime-workspace
