@@ -3,10 +3,11 @@
 
 #include <vector>
 #include <string>
-#include "Base.h"
+#include "Connector.h"
 
-class OrConnector : public Base {
+class OrConnector : public Connector {
  public:
+  OrConnector(Base* l, Base* r) : Connector(l, r) {}
   virtual StatusCode eval();
 };
 

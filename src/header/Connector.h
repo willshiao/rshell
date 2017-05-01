@@ -10,7 +10,8 @@ class Connector : public Base {
   Base* left;
   Base* right;
  public:
-  virtual StatusCode eval();
+  Connector(Base* l, Base* r) : left(l), right(r) {}
+  virtual StatusCode eval() = 0;
 };
 
 #endif

@@ -3,10 +3,11 @@
 
 #include <vector>
 #include <string>
-#include "Base.h"
+#include "Connector.h"
 
-class AndConnector : public Base {
+class AndConnector : public Connector {
  public:
+  AndConnector(Base* l, Base* r) : Connector(l, r) {}
   virtual StatusCode eval();
 };
 

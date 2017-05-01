@@ -3,10 +3,11 @@
 
 #include <vector>
 #include <string>
-#include "Base.h"
+#include "Connector.h"
 
-class CommandConnector : public Base {
+class CommandConnector : public Connector {
  public:
+  CommandConnector(Base* l, Base* r) : Connector(l, r) {}
   virtual StatusCode eval();
 };
 

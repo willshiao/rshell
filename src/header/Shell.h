@@ -7,7 +7,7 @@
 
 class Shell : public Base {
  public:
-  explicit Shell(std::vector<std::string>> args);
+  explicit Shell(std::vector<std::string> args);
   virtual StatusCode eval() = 0;
 };
 
