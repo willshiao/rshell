@@ -5,10 +5,10 @@
 #include <vector>
 #include "Base.h"
 
-class Shell : public Base {
+class Shell {
  public:
   explicit Shell(std::vector<std::string> args);
-  virtual StatusCode eval() = 0;
+  virtual StatusCode run();
 };
 
 #endif
