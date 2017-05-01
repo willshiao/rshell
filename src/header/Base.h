@@ -4,6 +4,7 @@
 #include "StatusCode.h"
 
 class Base {
+ public:
   virtual StatusCode eval() = 0;
 };
 

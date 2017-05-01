@@ -6,7 +6,7 @@
 #include "Base.h"
 
 class Connector : public Base {
- private:
+ protected:
   Base* left;
   Base* right;
  public:
