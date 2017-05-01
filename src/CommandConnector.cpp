@@ -3,6 +3,7 @@
 using namespace std;
 
 StatusCode CommandConnector::eval() {
-  // TODO: implement eval() logic
+  left->eval();
+  right->eval();
   return SUCCESS;
 }

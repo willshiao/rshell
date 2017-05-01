@@ -3,6 +3,7 @@
 using namespace std;
 
 StatusCode OrConnector::eval() {
-  // TODO: implement eval() logic
+  if(left->eval() == SUCCESS) return SUCCESS;
+  right->eval();
   return SUCCESS;
 }
