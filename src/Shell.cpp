@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <cstring>
 
 #include "header/Shell.h"
 #include "header/StatusCode.h"
@@ -16,11 +17,28 @@ Shell::Shell(vector<string> args) {
 }
 
 StatusCode Shell::run() {
-  string line;
   while(true) {
+    string line;
+    vector<string> words;
+
     cout << "$ ";
     getline(cin, line);
-    cout << "Got input: " << line << endl;
+
+    char* piece;
+    char* cline = new char[line.size() + 1];
+    strcpy(cline, line.c_str());
+    piece = strtok(cline, " ");
+
+    while(piece != nullptr) {
+      words.push_back(string(piece));
+      piece = strtok(nullptr, " ");
+    }
+
+    cout << "Got words: ";
+    for(unsigned i = 0; i < words.size(); ++i) {
+      cout << words.at(i) << " ";
+    }
+    cout << endl;
   }
   return SUCCESS;
 }
