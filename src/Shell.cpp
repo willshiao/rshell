@@ -39,6 +39,9 @@ StatusCode Shell::run() {
       cout << words.at(i) << " ";
     }
     cout << endl;
+    //Clean up
+    delete cline;
+    cline = nullptr;
   }
   return SUCCESS;
 }
