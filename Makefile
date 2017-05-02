@@ -5,6 +5,7 @@ SOURCES=$(wildcard src/*.cpp)
 OBJECTS=$(SOURCES:.cpp=.o)
 
 $(EXEC): $(OBJECTS)
+	mkdir -p bin
 	$(CC) $(OBJECTS) -o $(EXEC)
 
 %.o: %.cpp
