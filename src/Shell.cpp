@@ -3,6 +3,7 @@
 #include <cstring>
 
 #include "header/Shell.h"
+#include "header/Command.h"
 #include "header/StatusCode.h"
 
 using namespace std;
@@ -17,6 +18,8 @@ Shell::Shell(vector<string> args) {
 }
 
 StatusCode Shell::run() {
+  Command c;
+  c.eval();
   while(true) {
     string line;
     vector<string> words;
@@ -39,7 +42,7 @@ StatusCode Shell::run() {
       cout << words.at(i) << " ";
     }
     cout << endl;
-    //Clean up
+    // Clean up
     delete cline;
     cline = nullptr;
   }

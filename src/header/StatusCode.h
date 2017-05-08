@@ -5,6 +5,7 @@ enum StatusCode {
   SUCCESS,
   PERMISSION_ERROR,
   IO_ERROR,
+  FORK_ERROR,
   UNKNOWN_ERROR
 };
 

@@ -31,3 +31,5 @@
 bin
 *.sublime-project
 *.sublime-workspace
+
+vgcore.*
