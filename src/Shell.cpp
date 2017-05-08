@@ -18,8 +18,6 @@ Shell::Shell(vector<string> args) {
 }
 
 StatusCode Shell::run() {
-  Command c;
-  c.eval();
   while(true) {
     string line;
     vector<string> words;
@@ -45,6 +43,9 @@ StatusCode Shell::run() {
     // Clean up
     delete cline;
     cline = nullptr;
+
+    Command c(words);
+    c.eval();
   }
   return SUCCESS;
 }

@@ -9,45 +9,36 @@
 using namespace std;
 
 StatusCode Command::eval() {
-  cout << "Eval started" << endl;
-  vector<string> argv = { "-rf", "/mnt/c/Users/willshiao/Documents/GitHub/cs100-rshell/tmp" };
-  cout << "Trying runCommand" << endl;
-  runCommand("rm", argv);
-  // TODO: implement Command eval() logic
-  return SUCCESS;
+  StatusCode s = runCommand(this->args);
+  if(s != SUCCESS) cout << "Failed to run command" << endl;
+  return s;
 }
 
-StatusCode Command::runCommand(string path, const vector<string>& args) {
-  cout << "Running Command::runCommand" << endl;
-  char ** argv = new char* [args.size() + 2];
+StatusCode Command::runCommand(const vector<string>& args) {
+  // cout << "Running Command::runCommand" << endl;
+  char ** argv = new char* [args.size() + 1];
 
-  argv[0] = const_cast<char*>(path.c_str());
-  // strcpy(argv[0], path.c_str()); // 
-  cout << "First element: " << argv[0] << endl;
-  //  argv[0] = path.c_str();
   for(unsigned i = 0; i < args.size(); ++i) {
-    // strcpy(argv[i + 1], args.at(i).c_str());
-    argv[i + 1] = const_cast<char*>(args.at(i).c_str());
+    argv[i] = const_cast<char*>(args.at(i).c_str());
   }
-  argv[args.size() + 1] = nullptr;
+  argv[args.size()] = nullptr;
 
-
-  cout << "Running command at " << path << " with first arg: " << argv[0] << endl;
   pid_t pid = fork();
+  int commandStatus;
 
   if(pid == 0) {  // Child process
-    if(execvp(path.c_str(), argv) < 0) {
+    if(execvp(argv[0], argv) < 0) {
       cout << "Exec failed!" << endl;
       exit(1);
     }
-    delete[] argv;
     exit(0);
   } else if(pid > 0) {  // Parent process
-    waitpid(pid, nullptr, 0);
+    waitpid(pid, &commandStatus, 0);
+    // delete[] argv;
+    if(WIFEXITED(commandStatus) != 0) return SUCCESS;
+    return UNKNOWN_ERROR;
   } else {  // fork failed
-    delete[] argv;
+    // delete[] argv;
     return FORK_ERROR;
   }
-  delete[] argv;
-  return SUCCESS;
 }

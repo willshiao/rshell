@@ -5,11 +5,14 @@
 #include <string>
 #include "Base.h"
 
+using namespace std;
+
 class Command : public Base {
  private:
-  std::vector<std::string> args;
-  StatusCode runCommand(std::string path, const std::vector<std::string>& args);
+  vector<string> args;
+  StatusCode runCommand(const vector<string>& args);
  public:
+  explicit Command(vector<string> a) : args(a) {}
   virtual StatusCode eval();
 };
 
