@@ -28,7 +28,7 @@ StatusCode Command::runCommand(const vector<string>& args) {
 
   if(pid == 0) {  // Child process
     if(execvp(argv[0], argv) < 0) {
-      cout << "Exec failed!" << endl;
+      cout << "No command \"" << argv[0] << "\" found." << endl;
       exit(1);
     }
     exit(0);
