@@ -34,11 +34,11 @@ StatusCode Command::runCommand(const vector<string>& args) {
     exit(0);
   } else if(pid > 0) {  // Parent process
     waitpid(pid, &commandStatus, 0);
-    // delete[] argv;
+    delete[] argv;
     if(WIFEXITED(commandStatus) != 0) return SUCCESS;
     return UNKNOWN_ERROR;
   } else {  // fork failed
-    // delete[] argv;
+    delete[] argv;
     return FORK_ERROR;
   }
 }

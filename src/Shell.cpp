@@ -25,8 +25,8 @@ StatusCode Shell::run() {
     cout << "$ ";
     getline(cin, line);
 
-    char* piece;
-    char* cline = new char[line.size() + 1];
+    char *piece;
+    char *cline = new char[line.size() + 1];
     strcpy(cline, line.c_str());
     piece = strtok(cline, " ");
 
@@ -41,8 +41,10 @@ StatusCode Shell::run() {
     }
     cout << endl;
     // Clean up
-    delete cline;
+    delete[] cline;
+    delete[] piece;
     cline = nullptr;
+    piece = nullptr;
 
     Command c(words);
     c.eval();
