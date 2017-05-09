@@ -1,2 +1,2 @@
-ls testdir || touch testdir/file6 || ls
+ls testdir && touch testdir/file6 && ls
 exit

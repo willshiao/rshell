@@ -3,6 +3,6 @@
 using namespace std;
 
 StatusCode AndConnector::eval() {
-  if(left->eval() == SUCCESS) return SUCCESS;
+  if(left->eval() != SUCCESS) return SUCCESS;
   return right->eval();
 }

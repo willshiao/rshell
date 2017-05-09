@@ -18,8 +18,8 @@ Shell::Shell(vector<string> args) {
     for(unsigned i = 0; i < args.size(); ++i) {
       cout << args.at(i) << ' ';
     }
+    cout << endl;
   #endif
-  cout << endl;
 }
 
 StatusCode Shell::run() {
@@ -78,6 +78,7 @@ StatusCode Shell::run() {
         for(i += 1; i < words.size() && !isOperator(words.at(i)); ++i) {
           rightArgs.push_back(words.at(i));
         }
+        --i;
         if(word == "||") {
           mid = new OrConnector(left, new Command(rightArgs));
         } else if(word == "&&") {
@@ -87,6 +88,9 @@ StatusCode Shell::run() {
         mid = nullptr;
       }
     }
+    #ifdef DEBUG
+      cout << "tempArgs.size(): " << tempArgs.size() << endl;
+    #endif
     if(left == nullptr) {
       // cout << "Creating command with 1st arg: " << tempArgs.at(0) << endl;
       left = new Command(tempArgs);
