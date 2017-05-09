@@ -10,14 +10,16 @@ using namespace std;
 
 StatusCode Command::eval() {
   if(this->args.size() < 1) {
-    cout << "Invalid command." << endl;
+    cout << "No command found." << endl;
     return UNKNOWN_ERROR;
   }
   if(this->args.at(0) == "exit") {
     exit(0);
   }
   StatusCode s = runCommand(this->args);
-  if(s != SUCCESS) cout << "Invalid command." << endl;
+  #ifdef DEBUG
+    if(s != SUCCESS) cout << "Invalid command." << endl;
+  #endif
   return s;
 }
 
@@ -42,10 +44,16 @@ StatusCode Command::runCommand(const vector<string>& args) {
   } else if(pid > 0) {  // Parent process
     waitpid(pid, &commandStatus, 0);
     delete[] argv;
-    if(WIFEXITED(commandStatus) != 0) return SUCCESS;
+    if(WEXITSTATUS(commandStatus) == 0) return SUCCESS;
+    #ifdef DEBUG
+      cout << "Unknown error!" << endl;
+    #endif
     return UNKNOWN_ERROR;
   } else {  // fork failed
     delete[] argv;
+    #ifdef DEBUG
+      cout << "Fork error!" << endl;
+    #endif
     return FORK_ERROR;
   }
 }
