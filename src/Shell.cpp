@@ -30,6 +30,7 @@ StatusCode Shell::run() {
 
     size_t pos = line.find("#");
     line = line.substr(0, pos);
+    if(line.size() == 0) continue;
 
     char *piece;
     char *cline = new char[line.size() + 1];
@@ -81,10 +82,9 @@ StatusCode Shell::run() {
       }
     }
     if(left == nullptr) {
-      cout << "Creating command with 1st arg: " << tempArgs.at(0) << endl;
+      // cout << "Creating command with 1st arg: " << tempArgs.at(0) << endl;
       left = new Command(tempArgs);
     }
-    cout << "Executing left" << endl;
     left->eval();
   }
   return SUCCESS;

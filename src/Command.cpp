@@ -9,6 +9,13 @@
 using namespace std;
 
 StatusCode Command::eval() {
+  if(this->args.size() < 1) {
+    cout << "Invalid command." << endl;
+    return UNKNOWN_ERROR;
+  }
+  if(this->args.at(0) == "exit") {
+    exit(0);
+  }
   StatusCode s = runCommand(this->args);
   if(s != SUCCESS) cout << "Invalid command." << endl;
   return s;
