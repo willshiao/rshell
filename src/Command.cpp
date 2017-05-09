@@ -1,8 +1,8 @@
-#include <iostream>
-#include <cstring>
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <unistd.h>
+#include <iostream>
+#include <cstring>
 
 #include "header/Command.h"
 
@@ -10,7 +10,7 @@ using namespace std;
 
 StatusCode Command::eval() {
   StatusCode s = runCommand(this->args);
-  if(s != SUCCESS) cout << "Failed to run command" << endl;
+  if(s != SUCCESS) cout << "Invalid command." << endl;
   return s;
 }
 
