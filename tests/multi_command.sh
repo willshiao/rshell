@@ -8,6 +8,6 @@ if cmp -s multi_output.txt expected/multi_output.txt; then
 else
   echo "Multiple Command Test FAILED!";
 fi
-# rm -rf multi_output.txt
+rm -rf multi_output.txt
 
 ./cleanup.sh

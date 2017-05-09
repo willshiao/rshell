@@ -8,6 +8,6 @@ if cmp -s commented_output.txt expected/commented_output.txt; then
 else
   echo "Commented Command Test FAILED!";
 fi
-# rm -rf commented_output.txt
+rm -rf commented_output.txt
 
 ./cleanup.sh
