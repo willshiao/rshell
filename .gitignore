@@ -28,6 +28,8 @@
 *.out
 *.app
 
-bin/rshell
+bin
 *.sublime-project
 *.sublime-workspace
+
+vgcore.*

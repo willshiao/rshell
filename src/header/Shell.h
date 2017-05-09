@@ -9,6 +9,7 @@ class Shell {
  public:
   explicit Shell(std::vector<std::string> args);
   virtual StatusCode run();
+  static bool isOperator(const std::string &s);
 };
 
 #endif
