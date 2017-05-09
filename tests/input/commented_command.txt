@@ -1,0 +1,5 @@
+ls testdir #-la #input
+##
+# exit
+echo test#bob
+exit

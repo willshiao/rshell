@@ -13,10 +13,12 @@ using namespace std;
 
 Shell::Shell(vector<string> args) {
   if(args.size() < 1) return;
-  cout << "Shell intialized with arguments: ";
-  for(unsigned i = 0; i < args.size(); ++i) {
-    cout << args.at(i) << ' ';
-  }
+  #ifdef DEBUG
+    cout << "Shell intialized with arguments: ";
+    for(unsigned i = 0; i < args.size(); ++i) {
+      cout << args.at(i) << ' ';
+    }
+  #endif
   cout << endl;
 }
 
@@ -42,11 +44,13 @@ StatusCode Shell::run() {
       piece = strtok(nullptr, " ");
     }
 
-    cout << "Got words: ";
-    for(unsigned i = 0; i < words.size(); ++i) {
-      cout << words.at(i) << " ";
-    }
-    cout << endl;
+    #ifdef DEBUG
+      cout << "Got words: ";
+      for(unsigned i = 0; i < words.size(); ++i) {
+        cout << words.at(i) << " ";
+      }
+      cout << endl;
+    #endif
 
     // Clean up
     delete[] cline;
@@ -61,7 +65,9 @@ StatusCode Shell::run() {
     for(unsigned i = 0; i < words.size(); ++i) {
       string word = words.at(i);
       if(!isOperator(word)) {
-        cout << "Adding " << word << " to argument list" << endl;
+        #ifdef DEBUG
+          cout << "Adding " << word << " to argument list" << endl;
+        #endif
         tempArgs.push_back(word);
       } else {  // Is an operator character
         if(left == nullptr) {
