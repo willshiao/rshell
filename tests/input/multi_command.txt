@@ -1,2 +1,8 @@
 ls testdir && touch testdir/file6 && ls
+echo ====================
+ls testdir || touch testdir/file7
+ls testdir
+touch /dev/null || echo "should run"
+echo ====================
+fakecommand || fakecommand || echo a && echo tree
 exit

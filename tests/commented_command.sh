@@ -2,7 +2,7 @@
 
 ./setup.sh
 
-../bin/rshell < input/commented_command.txt > commented_output.txt
+../bin/rshell < input/commented_command.txt &> commented_output.txt
 if cmp -s commented_output.txt expected/commented_output.txt; then
   echo "Commented Command Test Passed.";
 else
