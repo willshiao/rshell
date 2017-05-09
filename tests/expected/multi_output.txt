@@ -27,7 +27,8 @@ file3
 file4
 file5
 file6
-$ "should run"
+$ No command "notacommand" found.
+"should run"
 $ ====================
 $ No command "fakecommand" found.
 No command "fakecommand" found.
