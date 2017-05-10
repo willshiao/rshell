@@ -45,8 +45,8 @@ StatusCode Shell::run() {
     }
 
     for(auto it = words.begin(); it != words.end(); ++it) {
-      if(it->at(it->size() - 1) == ';') {
-        while(it->at(it->size() - 1) == ';') {
+      if(it->size() > 0 && it->at(it->size() - 1) == ';') {
+        while(it->size() > 0 && it->at(it->size() - 1) == ';') {
           *it = it->substr(0, it->size() - 1);
         }
         it = words.insert(it + 1, ";");

@@ -15,8 +15,8 @@ bool Command::isEmpty() {
 }
 
 StatusCode Command::eval() {
-  if(this->args.size() < 1) {
-    cout << "No command found." << endl;
+  if(this->args.size() < 1 || this->args.at(0) == "") {
+    cout << "Missing command." << endl;
     return UNKNOWN_ERROR;
   }
   if(this->args.at(0) == "exit") {
