@@ -45,9 +45,10 @@ StatusCode Shell::run() {
     }
 
     for(auto it = words.begin(); it != words.end(); ++it) {
-      string word = *it;
-      if(word.at(word.size() - 1) == ';') {
-        *it = word.substr(0, word.size() - 1);
+      if(it->at(it->size() - 1) == ';') {
+        while(it->at(it->size() - 1) == ';') {
+          *it = it->substr(0, it->size() - 1);
+        }
         it = words.insert(it + 1, ";");
       }
     }
