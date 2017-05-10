@@ -45,4 +45,20 @@ $ 1
 5
 6
 7
+$ ====================
+$ cleanup.sh
+commented_command.sh
+exit.sh
+expected
+input
+multi_command.sh
+multi_output.txt
+run_tests.sh
+setup.sh
+single_command.sh
+testdir
+Missing command.
+Missing command.
+Missing command.
+Missing command.
 $ 
