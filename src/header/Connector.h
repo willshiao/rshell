@@ -12,6 +12,7 @@ class Connector : public Base {
  public:
   Connector(Base* l, Base* r) : left(l), right(r) {}
   virtual StatusCode eval() = 0;
+  virtual bool isEmpty();
 };
 
 #endif

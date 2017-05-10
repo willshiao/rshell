@@ -15,6 +15,7 @@ class Command : public Base {
  public:
   explicit Command(vector<string> a) : args(a) { }
   virtual StatusCode eval();
+  virtual bool isEmpty();
 };
 
 #endif

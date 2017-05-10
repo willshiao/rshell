@@ -6,6 +6,7 @@
 class Base {
  public:
   virtual StatusCode eval() = 0;
+  virtual bool isEmpty() = 0;
 };
 
 #endif

@@ -8,6 +8,12 @@
 
 using namespace std;
 
+bool Command::isEmpty() {
+  if(this->args.size() == 0) return true;
+  // if(this->args.size() > 1) return false;
+  return false;
+}
+
 StatusCode Command::eval() {
   if(this->args.size() < 1) {
     cout << "No command found." << endl;

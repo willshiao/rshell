@@ -4,6 +4,6 @@ using namespace std;
 
 StatusCode CommandConnector::eval() {
   left->eval();
-  right->eval();
+  if(!right->isEmpty()) right->eval();
   return SUCCESS;
 }

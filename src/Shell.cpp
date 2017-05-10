@@ -44,6 +44,14 @@ StatusCode Shell::run() {
       piece = strtok(nullptr, " ");
     }
 
+    for(auto it = words.begin(); it != words.end(); ++it) {
+      string word = *it;
+      if(word.at(word.size() - 1) == ';') {
+        *it = word.substr(0, word.size() - 1);
+        it = words.insert(it + 1, ";");
+      }
+    }
+
     #ifdef DEBUG
       cout << "Got words: ";
       for(unsigned i = 0; i < words.size(); ++i) {
@@ -83,7 +91,9 @@ StatusCode Shell::run() {
           mid = new OrConnector(left, new Command(rightArgs));
         } else if(word == "&&") {
           mid = new AndConnector(left, new Command(rightArgs));
-        }  // TODO: Handle semicolon
+        } else {
+          mid = new CommandConnector(left, new Command(rightArgs));
+        }
         left = mid;
         mid = nullptr;
       }
