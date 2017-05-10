@@ -5,3 +5,4 @@ cd "$DIR"
 ./commented_command.sh
 ./multi_command.sh
 ./exit.sh
+./single_command.sh

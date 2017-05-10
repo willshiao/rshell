@@ -1,0 +1,8 @@
+cat testdir/file1
+sed s/CS100/cs/ testdir/file1
+ls testdir
+rm testdir/file2
+ls testdir
+touch testdir/file6
+ls testdir
+exit
