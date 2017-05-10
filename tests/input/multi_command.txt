@@ -5,4 +5,7 @@ ls testdir
 notacommand || echo "should run"
 echo ====================
 fakecommand || fakecommand || echo a && echo tree
+echo ====================
+fakecommand;; a || b || echo c
+echo 1; echo 2; echo 34; echo 5;;; echo 6;;; echo 7;
 exit
