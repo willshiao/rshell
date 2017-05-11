@@ -10,6 +10,7 @@ Parsing is done assuming the specifications of the assignment are true:
 - `||` and `&&` operators are always surrounded by a space.
 - The `;` operator does not have a space in front of it and is always followed by a space.
 
+We used a Kanban board to manage tasks, which can be viewed [here](https://github.com/willshiao/rshell/projects/1). A detailed overview of our initial design can be viewed [here](https://github.com/willshiao/rshell/raw/master/docs/rshell.pdf).
 
 ## UML Diagram
 
