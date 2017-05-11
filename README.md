@@ -1,6 +1,8 @@
 # RShell
+- William Shiao
+- Siddhanth Sharma
 
-This is an shell created for CS100.
+This is a shell created for CS100.
 
 To run the tests, execute the test script (`tests/run_tests.sh`).
 
