@@ -1,0 +1,64 @@
+$ file1
+file2
+file3
+file4
+file5
+cleanup.sh
+commented_command.sh
+exit.sh
+expected
+input
+multi_command.sh
+multi_output.txt
+run_tests.sh
+setup.sh
+single_command.sh
+testdir
+$ ====================
+$ file1
+file2
+file3
+file4
+file5
+file6
+$ file1
+file2
+file3
+file4
+file5
+file6
+$ No command "notacommand" found.
+"should run"
+$ ====================
+$ No command "fakecommand" found.
+No command "fakecommand" found.
+a
+tree
+$ ====================
+$ No command "fakecommand" found.
+No command "a" found.
+No command "b" found.
+c
+$ 1
+2
+34
+5
+6
+7
+$ ====================
+$ cleanup.sh
+commented_command.sh
+exit.sh
+expected
+input
+multi_command.sh
+multi_output.txt
+run_tests.sh
+setup.sh
+single_command.sh
+testdir
+Missing command.
+Missing command.
+Missing command.
+Missing command.
+$ 

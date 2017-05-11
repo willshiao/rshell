@@ -1,1 +1,4 @@
 echo a && echo b; exit
+nothing here should execute
+echo tree
+exit

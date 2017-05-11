@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$DIR"
+
 ./setup.sh
 
 ../bin/rshell < input/single_command.txt &> single_output.txt
