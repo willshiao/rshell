@@ -1,7 +1,6 @@
 # RShell
-- William Shiao
-- Siddhanth Sharma
 
+## Description
 This is a shell created for CS100.
 
 To run the tests, execute the test script (`tests/run_tests.sh`).
@@ -12,6 +11,11 @@ To run the tests, execute the test script (`tests/run_tests.sh`).
 Below is a UML diagram of the starting structure for this program.
 
 ![UML Diagram](https://raw.githubusercontent.com/willshiao/cs100-rshell/master/docs/uml.png)
+
+
+## Contributors
+- William Shiao
+- Siddhanth Sharma
 
 
 ## Issues/Bugs
