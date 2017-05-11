@@ -25,4 +25,4 @@ Below is a UML diagram of the starting structure for this program. Note
 
 ## Issues/Bugs
 
-See the [issues page](https://github.com/willshiao/cs100-rshell/issues) for a full list of fixed and current bugs, as well as planned features.
+See the [issues page](https://github.com/willshiao/rshell/issues?utf8=%E2%9C%93&q=) for a full list of fixed and current bugs, as well as planned and completed features.

@@ -17,3 +17,4 @@
 *.RTF	 diff=astextplain
 
 *.png binary
+*.pdf binary
