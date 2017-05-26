@@ -1,2 +1,4 @@
 language: cpp
+compiler: gcc
+dist: trusty
 script: make && make test
