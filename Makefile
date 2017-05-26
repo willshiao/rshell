@@ -13,3 +13,6 @@ $(EXEC): $(OBJECTS)
 
 clean:
 	rm -f $(EXEC) $(OBJECTS)
+
+test:
+	tests/run_tests.sh
