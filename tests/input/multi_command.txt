@@ -1,4 +1,4 @@
-ls testdir && touch testdir/file6 && ls
+ls testdir && touch testdir/file6 && ls -a testdir
 echo ====================
 ls testdir || touch testdir/file7
 ls testdir
@@ -9,5 +9,5 @@ echo ====================
 fakecommand;; a || b || echo c
 echo 1; echo 2; echo 34; echo 5;;; echo 6;;; echo 7;
 echo ====================
-ls; ;;; ;;;; ;;; || ;;; ;
+ls testdir; ;;; ;;;; ;;; || ;;; ;
 exit
