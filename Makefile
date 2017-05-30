@@ -10,7 +10,7 @@ $(EXEC): $(OBJECTS)
 
 debug: $(SOURCES)
 	mkdir -p bin
-	$(CC) $(CC_FLAGS) -DDEBUG $(SOURCES) -o $(EXEC)
+	$(CC) $(CC_FLAGS) -DDEBUG $(SOURCES) -o $(EXEC)_debug
 
 %.o: %.cpp
 	$(CC) -c $(CC_FLAGS) $< -o $@
