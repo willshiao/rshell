@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
+#include <iterator>
+#include <boost/regex.hpp>
 
 #include "header/Shell.h"
 #include "header/Command.h"
@@ -23,6 +25,9 @@ Shell::Shell(vector<string> args) {
 }
 
 StatusCode Shell::run() {
+  boost::regex testRegex;
+  testRegex.assign("\\[(.+?)\\]");
+
   while(true) {
     string line;
     vector<string> words;
@@ -30,10 +35,18 @@ StatusCode Shell::run() {
     cout << "$ ";
     getline(cin, line);
 
+    // Clear out comments
     size_t pos = line.find("#");
     line = line.substr(0, pos);
     if(line.size() == 0) continue;
 
+    // Replace [test] shorthand with actual test command
+    // string newLine = "";
+    line = boost::regex_replace(line, testRegex, "test$1");
+    // regex_replace(back_inserter(newLine), line.begin(), line.end(), testRegex, "test$1");
+    // line = newLine;
+
+    // Split by spaces
     char *piece;
     char *cline = new char[line.size() + 1];
     strcpy(cline, line.c_str());
@@ -44,6 +57,7 @@ StatusCode Shell::run() {
       piece = strtok(nullptr, " ");
     }
 
+    // Insert semicolons after commands
     for(auto it = words.begin(); it != words.end(); ++it) {
       if(it->size() > 0 && it->at(it->size() - 1) == ';') {
         while(it->size() > 0 && it->at(it->size() - 1) == ';') {

@@ -2,8 +2,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
-#include <iostream>
 #include <cstring>
+#include <iostream>
 
 #include "header/Command.h"
 
@@ -76,16 +76,7 @@ StatusCode TestCommand::runCommand(const vector<string>& args) {
   struct stat buf;
 
   if(args.at(1) == "-e") {
-    if(stat(args.at(2).c_str(), &buf) == -1) {
-      #ifdef DEBUG
-        cout << args.at(2) << " does not exist" << endl;
-      #endif
-    } else {
-      #ifdef DEBUG
-        cout << args.at(2) << " exists" << endl;
-      #endif
-      status = true;
-    }
+    status = (stat(args.at(2).c_str(), &buf) != -1);
   } else if(args.at(1) == "-d") {
     status = false;
   } else if(args.at(1) == "-f") {
