@@ -11,8 +11,10 @@ RES="$RES$?"
 RES="$RES$?"
 ./single_command.sh
 RES="$RES$?"
+./test_command.sh
+RES="$RES$?"
 
-if [[ "$RES" = "0000" ]]; then
+if [[ "$RES" = "00000" ]]; then
   echo "All tests passed!"
   exit 0;
 else

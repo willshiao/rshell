@@ -1,0 +1,5 @@
+test -e testdir/file1
+test -e testdir/file99
+[ -e testdir/file1 ]
+[ -e testdir/file99 ]
+exit
