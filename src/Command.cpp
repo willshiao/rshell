@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 #include <iostream>
 #include <cstring>
 
@@ -62,4 +63,35 @@ StatusCode Command::runCommand(const vector<string>& args) {
     #endif
     return FORK_ERROR;
   }
+}
+
+StatusCode TestCommand::runCommand(const vector<string>& args) {
+  if(args.size() < 2) {
+    cout << "Invalid test command." << endl;
+    return COMMAND_ERROR;
+  }
+  bool status = false;
+  struct stat buf;
+
+  if(args.at(0) == "-e") {
+    if(stat(args.at(1).c_str(), &buf) == -1) {
+      #ifdef DEBUG
+        cout << args.at(1) << " does not exist" << endl;
+      #endif
+    } else {
+      #ifdef DEBUG
+        cout << args.at(1) << " exists" << endl;
+      #endif
+      status = true;
+    }
+  } else if(args.at(0) == "-d") {
+    status = false;
+  } else if(args.at(0) == "-f") {
+    status = false;
+  } else {
+    cout << "Invalid test command." << endl;
+    return COMMAND_ERROR;
+  }
+  cout << (status ? "(True)" : "False") << endl;
+  return (status ? SUCCESS : IO_ERROR);
 }
