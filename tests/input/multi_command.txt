@@ -1,13 +1,18 @@
 ls testdir && touch testdir/file6 && ls -a testdir
 echo ====================
 ls testdir || touch testdir/file7
+echo ====================
 ls testdir
+echo ====================
 notacommand || echo "should run"
 echo ====================
 fakecommand || fakecommand || echo a && echo tree
 echo ====================
 fakecommand;; a || b || echo c
+echo ====================
 echo 1; echo 2; echo 34; echo 5;;; echo 6;;; echo 7;
+echo ====================
+ls -j && echo A || echo B
 echo ====================
 ls testdir; ;;; ;;;; ;;; || ;;; ;
 exit

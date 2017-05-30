@@ -6,7 +6,8 @@ enum StatusCode {
   PERMISSION_ERROR,
   IO_ERROR,
   FORK_ERROR,
-  UNKNOWN_ERROR
+  UNKNOWN_ERROR,
+  COMMAND_ERROR,
 };
 
 #endif
