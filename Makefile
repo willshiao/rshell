@@ -8,6 +8,10 @@ $(EXEC): $(OBJECTS)
 	mkdir -p bin
 	$(CC) $(OBJECTS) -o $(EXEC)
 
+debug: $(OBJECTS)
+	mkdir -p bin
+	$(CC) $(CC_FLAGS) $(SOURCES) -o $(EXEC)
+
 %.o: %.cpp
 	$(CC) -c $(CC_FLAGS) $< -o $@
 
