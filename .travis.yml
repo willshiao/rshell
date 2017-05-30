@@ -1,4 +1,6 @@
 language: cpp
 compiler: gcc
 dist: trusty
+before_install:
+  - sudo apt install libboost-regex-dev -y
 script: make && make test
