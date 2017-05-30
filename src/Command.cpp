@@ -22,8 +22,10 @@ StatusCode Command::eval() {
   }
   if(this->args.at(0) == "exit") {
     exit(0);
+  } else if(this->args.at(0) == "test") {
+    return TestCommand::runCommand(this->args);
   }
-  StatusCode s = runCommand(this->args);
+  StatusCode s = Command::runCommand(this->args);
   #ifdef DEBUG
     if(s != SUCCESS) cout << "Invalid command." << endl;
   #endif
@@ -66,32 +68,32 @@ StatusCode Command::runCommand(const vector<string>& args) {
 }
 
 StatusCode TestCommand::runCommand(const vector<string>& args) {
-  if(args.size() < 2) {
+  if(args.size() < 3) {
     cout << "Invalid test command." << endl;
     return COMMAND_ERROR;
   }
   bool status = false;
   struct stat buf;
 
-  if(args.at(0) == "-e") {
-    if(stat(args.at(1).c_str(), &buf) == -1) {
+  if(args.at(1) == "-e") {
+    if(stat(args.at(2).c_str(), &buf) == -1) {
       #ifdef DEBUG
-        cout << args.at(1) << " does not exist" << endl;
+        cout << args.at(2) << " does not exist" << endl;
       #endif
     } else {
       #ifdef DEBUG
-        cout << args.at(1) << " exists" << endl;
+        cout << args.at(2) << " exists" << endl;
       #endif
       status = true;
     }
-  } else if(args.at(0) == "-d") {
+  } else if(args.at(1) == "-d") {
     status = false;
-  } else if(args.at(0) == "-f") {
+  } else if(args.at(1) == "-f") {
     status = false;
   } else {
     cout << "Invalid test command." << endl;
     return COMMAND_ERROR;
   }
-  cout << (status ? "(True)" : "False") << endl;
+  cout << (status ? "(True)" : "(False)") << endl;
   return (status ? SUCCESS : IO_ERROR);
 }
