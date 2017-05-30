@@ -8,9 +8,9 @@ $(EXEC): $(OBJECTS)
 	mkdir -p bin
 	$(CC) $(OBJECTS) -o $(EXEC)
 
-debug: $(OBJECTS)
+debug: $(SOURCES)
 	mkdir -p bin
-	$(CC) $(CC_FLAGS) $(SOURCES) -o $(EXEC)
+	$(CC) $(CC_FLAGS) -DDEBUG $(SOURCES) -o $(EXEC)
 
 %.o: %.cpp
 	$(CC) -c $(CC_FLAGS) $< -o $@
