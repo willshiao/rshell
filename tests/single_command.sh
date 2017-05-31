@@ -16,5 +16,6 @@ if cmp -s single_output.txt expected/single_output.txt; then
   finish 0
 else
   echo "Single Command Test FAILED!";
+  diff -y single_output.txt expected/single_output.txt;
   finish 1
 fi

@@ -16,5 +16,6 @@ if cmp -s commented_output.txt expected/commented_output.txt; then
   finish 0
 else
   echo "Commented Command Test FAILED!";
+  diff -y commented_output.txt expected/commented_output.txt;
   finish 1
 fi

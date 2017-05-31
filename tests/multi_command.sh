@@ -16,5 +16,6 @@ if cmp -s multi_output.txt expected/multi_output.txt; then
   finish 0
 else
   echo "Multiple Command Test FAILED!";
+  diff -y multi_output.txt expected/multi_output.txt;
   finish 1
 fi

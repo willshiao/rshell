@@ -16,5 +16,6 @@ if cmp -s test_output.txt expected/test_output.txt; then
   finish 0
 else
   echo "Test Command Test FAILED!";
+  diff -y test_output.txt expected/test_output.txt;
   finish 1
 fi

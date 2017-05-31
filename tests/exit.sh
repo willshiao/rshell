@@ -19,5 +19,6 @@ if cmp -s exit_output.txt expected/exit_output.txt; then
   finish 0
 else
   echo "Exit Test FAILED!";
+  diff -y exit_output.txt expected/exit_output.txt;
   finish 1
 fi
