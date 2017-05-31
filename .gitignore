@@ -31,5 +31,6 @@
 bin
 *.sublime-project
 *.sublime-workspace
+tests/*_output.txt
 
 vgcore.*
