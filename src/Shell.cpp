@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
+#include <sstream>
 #include <iterator>
 #include <boost/regex.hpp>
 
@@ -71,6 +72,17 @@ Base* Shell::parseCommand(string line) {
     }
   }
 
+  // Insert parentheses as seperate tokens
+  for(auto it = words.begin(); it != words.end(); ++it) {
+    if(it->size() > 1 && it->at(0) == '(') {
+      *it = it->substr(1);
+      it = words.insert(it, "(");
+    } else if(it->size() > 1 && it->at(it->size() - 1) == ')') {
+      *it = it->substr(0, it->size() - 1);
+      it = words.insert(it + 1, ")");
+    }
+  }
+
   #ifdef DEBUG
     cout << "Got words: ";
     for(unsigned i = 0; i < words.size(); ++i) {
@@ -97,6 +109,7 @@ Base* Shell::parseCommand(string line) {
       #endif
       tempArgs.push_back(word);
     } else {  // Is an operator character
+      if(word == "(" || word == ")") continue;  // TODO: do something with parentheses
       if(left == nullptr) {
         left = new Command(tempArgs);
         tempArgs.clear();
@@ -128,5 +141,5 @@ Base* Shell::parseCommand(string line) {
 }
 
 bool Shell::isOperator(const string &s) {
-  return s == "||" || s == "&&" || s == ";";
+  return s == "||" || s == "&&" || s == ";" || s == "(" || s == ")";
 }
