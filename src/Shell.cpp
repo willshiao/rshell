@@ -16,6 +16,18 @@
 
 using namespace std;
 
+Base* popOrNull(stack<Base*>& s) {
+  Base* ret;
+  if(!s.empty()) {
+    ret = s.top();
+    s.pop();
+  } else {
+    cout << "Invalid expression" << endl;
+    ret = new NullCommand();
+  }
+  return ret;
+}
+
 Shell::Shell(vector<string> args) {
   if(args.size() < 1) return;
   #ifdef DEBUG
@@ -129,18 +141,8 @@ Base* Shell::parseCommand(string line) {
 
         Base *left;
         Base *right;
-        if(!operands.empty()) {
-          right = operands.top();
-          operands.pop();
-        } else {
-          cout << "Invalid statement" << endl;
-        }
-        if(!operands.empty()) {
-          left = operands.top();
-          operands.pop();
-        } else {
-          cout << "Invalid statement" << endl;
-        }
+        right = popOrNull(operands);
+        left = popOrNull(operands);
         operands.push(applyOperator(op, left, right));
       }
     } else if(isOperator(word)) {
@@ -155,18 +157,8 @@ Base* Shell::parseCommand(string line) {
         #endif
         Base *left;
         Base *right;
-        if(!operands.empty()) {
-          right = operands.top();
-          operands.pop();
-        } else {
-          cout << "Invalid statement" << endl;
-        }
-        if(!operands.empty()) {
-          left = operands.top();
-          operands.pop();
-        } else {
-          cout << "Invalid statement" << endl;
-        }
+        right = popOrNull(operands);
+        left = popOrNull(operands);
         operands.push(applyOperator(op, left, right));
       }
       operators.push(word);
@@ -181,18 +173,8 @@ Base* Shell::parseCommand(string line) {
 
     Base *left;
     Base *right;
-    if(!operands.empty()) {
-      right = operands.top();
-      operands.pop();
-    } else {
-      cout << "Invalid statement" << endl;
-    }
-    if(!operands.empty()) {
-      left = operands.top();
-      operands.pop();
-    } else {
-      cout << "Invalid statement" << endl;
-    }
+    right = popOrNull(operands);
+    left = popOrNull(operands);
     operands.push(applyOperator(op, left, right));
   }
 
