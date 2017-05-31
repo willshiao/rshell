@@ -3,8 +3,10 @@
 #include <cstring>
 #include <sstream>
 #include <iterator>
+#include <stack>
 #include <boost/regex.hpp>
 
+#include "header/Base.h"
 #include "header/Shell.h"
 #include "header/Command.h"
 #include "header/StatusCode.h"
@@ -97,49 +99,139 @@ Base* Shell::parseCommand(string line) {
   cline = nullptr;
   piece = nullptr;
 
-  Base *left = nullptr,
-    *mid = nullptr;
   vector<string> tempArgs;
+  stack<string> operators;
+  stack<Base*> operands;
 
+  // Do actual parsing
   for(unsigned i = 0; i < words.size(); ++i) {
     string word = words.at(i);
-    if(!isOperator(word)) {
+    if(!isSymbol(word)) {
       #ifdef DEBUG
-        cout << "Adding " << word << " to argument list" << endl;
+        cout << "Not a symbol: " << word << endl;
       #endif
-      tempArgs.push_back(word);
-    } else {  // Is an operator character
-      if(word == "(" || word == ")") continue;  // TODO: do something with parentheses
-      if(left == nullptr) {
-        left = new Command(tempArgs);
-        tempArgs.clear();
-      }
-      vector<string> rightArgs;
-      for(i += 1; i < words.size() && !isOperator(words.at(i)); ++i) {
-        rightArgs.push_back(words.at(i));
+      for(; i < words.size() && !isSymbol(words.at(i)); ++i) {
+        tempArgs.push_back(words.at(i));
       }
       --i;
-      if(word == "||") {
-        mid = new OrConnector(left, new Command(rightArgs));
-      } else if(word == "&&") {
-        mid = new AndConnector(left, new Command(rightArgs));
-      } else {
-        mid = new CommandConnector(left, new Command(rightArgs));
+      operands.push(new Command(tempArgs));
+      tempArgs.clear();
+      continue;
+    } else if(word == "(") {
+      operators.push(word);
+    } else if(word == ")") {
+      while(operators.top() != "(") {
+        string op = operators.top();
+        operators.pop();
+        #ifdef DEBUG
+          cout << "Got operator: " << op << endl;
+        #endif
+
+        Base *left;
+        Base *right;
+        if(!operands.empty()) {
+          right = operands.top();
+          operands.pop();
+        } else {
+          cout << "Invalid statement" << endl;
+        }
+        if(!operands.empty()) {
+          left = operands.top();
+          operands.pop();
+        } else {
+          cout << "Invalid statement" << endl;
+        }
+        operands.push(applyOperator(op, left, right));
       }
-      left = mid;
-      mid = nullptr;
+    } else if(isOperator(word)) {
+      #ifdef DEBUG
+        cout << "Current word is operator: " << word << endl;
+      #endif
+      while(!operators.empty()) {
+        string op = operators.top();
+        operators.pop();
+        #ifdef DEBUG
+          cout << "Got operator: " << op << endl;
+        #endif
+        Base *left;
+        Base *right;
+        if(!operands.empty()) {
+          right = operands.top();
+          operands.pop();
+        } else {
+          cout << "Invalid statement" << endl;
+        }
+        if(!operands.empty()) {
+          left = operands.top();
+          operands.pop();
+        } else {
+          cout << "Invalid statement" << endl;
+        }
+        operands.push(applyOperator(op, left, right));
+      }
+      operators.push(word);
     }
   }
-  #ifdef DEBUG
-    cout << "tempArgs.size(): " << tempArgs.size() << endl;
-  #endif
-  if(left == nullptr) {
-    // cout << "Creating command with 1st arg: " << tempArgs.at(0) << endl;
-    left = new Command(tempArgs);
+  while(!operators.empty()) {
+    string op = operators.top();
+    #ifdef DEBUG
+      cout << "Got operator: " << op << endl;
+    #endif
+    operators.pop();
+
+    Base *left;
+    Base *right;
+    if(!operands.empty()) {
+      right = operands.top();
+      operands.pop();
+    } else {
+      cout << "Invalid statement" << endl;
+    }
+    if(!operands.empty()) {
+      left = operands.top();
+      operands.pop();
+    } else {
+      cout << "Invalid statement" << endl;
+    }
+    operands.push(applyOperator(op, left, right));
   }
-  return left;
+
+  if(!operators.empty()) {
+    cout << "Messed up command" << endl;
+  }
+  return operands.top();
+}
+
+Base* Shell::applyOperator(const string& op, Base* left, Base* right) {
+  if(!isOperator(op)) {
+    cout << "Invalid operator." << endl;
+    return nullptr;
+  }
+  if(op == "||") {
+    #ifdef DEBUG
+      cout << "Created new OrConnector" << endl;
+    #endif
+    return new OrConnector(left, right);
+  } else if(op == "&&") {
+    #ifdef DEBUG
+      cout << "Created new AndConnector" << endl;
+    #endif
+    return new AndConnector(left, right);
+  }
+  #ifdef DEBUG
+    cout << "Created new CommandConnector" << endl;
+  #endif
+  return new CommandConnector(left, right);
 }
 
 bool Shell::isOperator(const string &s) {
-  return s == "||" || s == "&&" || s == ";" || s == "(" || s == ")";
+  return s == "||" || s == "&&" || s == ";";
+}
+
+bool Shell::isParens(const string &s) {
+  return s == "(" || s == ")";
+}
+
+bool Shell::isSymbol(const string &s) {
+  return Shell::isOperator(s) || Shell::isParens(s);
 }

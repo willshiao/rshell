@@ -13,7 +13,15 @@ class Command : public Base {
   vector<string> args;
  public:
   static StatusCode runCommand(const vector<string>& args);
-  explicit Command(vector<string> a) : args(a) { }
+  explicit Command(vector<string> a) : args(a) {
+    #ifdef DEBUG
+      cout << "New command created with args: ";
+      for(auto str : a) {
+        cout << str << " ";
+      }
+      cout << endl;
+    #endif
+  }
   virtual StatusCode eval();
   virtual bool isEmpty();
 };
