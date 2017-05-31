@@ -6,6 +6,8 @@
 #include "Base.h"
 
 class Shell {
+ private:
+  Base* parseCommand(std::string line);
  public:
   explicit Shell(std::vector<std::string> args);
   virtual StatusCode run();
