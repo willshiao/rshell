@@ -12,7 +12,7 @@ class Command : public Base {
  protected:
   vector<string> args;
  public:
-  static StatusCode runCommand(const vector<string>& args);
+  static StatusCode runCommand(vector<string>& args);
   Command() {}
   explicit Command(vector<string> a) : args(a) {
     #ifdef DEBUG
@@ -37,7 +37,7 @@ class NullCommand : public Command {
 
 class TestCommand : public Command {
  public:
-  static StatusCode runCommand(const vector<string>& args);
+  static StatusCode runCommand(vector<string>& args);
   explicit TestCommand(vector<string> a) : Command(a) { }
 };
 

@@ -16,7 +16,7 @@ debug: $(SOURCES)
 	$(CC) -c $(CC_FLAGS) $< -o $@ -lboost_regex
 
 clean:
-	rm -f $(EXEC) $(OBJECTS)
+	rm -f $(EXEC) $(OBJECTS) vgcore.*
 
 test:
 	tests/run_tests.sh

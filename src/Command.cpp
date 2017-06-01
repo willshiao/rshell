@@ -32,7 +32,7 @@ StatusCode Command::eval() {
   return s;
 }
 
-StatusCode Command::runCommand(const vector<string>& args) {
+StatusCode Command::runCommand(vector<string>& args) {
   // cout << "Running Command::runCommand" << endl;
   char ** argv = new char* [args.size() + 1];
 
@@ -67,10 +67,12 @@ StatusCode Command::runCommand(const vector<string>& args) {
   }
 }
 
-StatusCode TestCommand::runCommand(const vector<string>& args) {
-  if(args.size() < 3) {
+StatusCode TestCommand::runCommand(vector<string>& args) {
+  if(args.size() < 2) {
     cout << "Invalid test command." << endl;
     return COMMAND_ERROR;
+  } else if(args.size() == 2) {
+    args.insert(args.begin() + 1, "-e");
   }
   bool status = false;
   struct stat buf;
