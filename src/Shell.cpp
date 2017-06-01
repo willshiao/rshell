@@ -63,7 +63,7 @@ Base* Shell::parseCommand(string line) {
   vector<string> words;
 
   // Replace [test] shorthand with actual test command
-  line = boost::regex_replace(line, testRegex, "test$1");
+  line = boost::regex_replace(line, testRegex, "test $1");
 
   // Split by spaces
   char *piece;

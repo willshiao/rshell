@@ -12,7 +12,7 @@ fakecommand;; a || b || echo c
 echo ====================
 echo 1; echo 2; echo 34; echo 5;;; echo 6;;; echo 7;
 echo ====================
-ls -j && echo A || echo B
+fakecommand && echo A || echo B
 echo ====================
 ls testdir; ;;; ;;;; ;;; || ;;; ;
 exit
