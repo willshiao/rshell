@@ -1,5 +1,21 @@
-test -e testdir/file1
-test -e testdir/file99
-[ -e testdir/file1 ]
-[ -e testdir/file99 ]
+echo ====================
+test -e testdir/file1 # T
+echo ====================
+test -e testdir/file99 #F
+echo ====================
+[ -e testdir/file1 ] # T
+echo ====================
+[ -e testdir/file99 ] # F
+echo ====================
+[ testdir/file1 ] # T
+echo ====================
+[ testdir/file99 ] # F
+echo ====================
+[ -d testdir ] # T
+echo ====================
+[ -d testdir/file1 ] # F
+echo ====================
+[ -f testdir ] # F
+echo ====================
+[ -f testdir/file1 ] # T
 exit
