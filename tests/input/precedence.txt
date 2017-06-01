@@ -1,0 +1,11 @@
+echo ====================
+echo a || (echo b && ls -j) && echo d  # should echo a and d
+echo ====================
+(echo a && echo b)
+echo ====================
+echo a || (echo e && echo b && ls -j && echo c) && echo d
+echo ====================
+echo a || ((echo e && echo b && ls -j && echo c)) && echo d
+echo ====================
+echo a && (echo e && (echo f || echo g) && echo b && ls -j && echo c) && echo d
+exit

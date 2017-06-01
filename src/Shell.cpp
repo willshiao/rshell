@@ -92,15 +92,20 @@ Base* Shell::parseCommand(string line) {
       *it = it->substr(1);
       it = words.insert(it, "(");
     } else if(it->size() > 1 && it->at(it->size() - 1) == ')') {
-      *it = it->substr(0, it->size() - 1);
-      it = words.insert(it + 1, ")");
+      int count = 0;
+      for(; it->size() > 1 && it->at(it->size() - 1) == ')'; ++count) {
+        *it = it->substr(0, it->size() - 1);
+      }
+      for(int i = 0; i < count; ++i) {
+        it = words.insert(it + 1, ")");
+      }
     }
   }
 
   #ifdef DEBUG
     cout << "Got words: ";
     for(unsigned i = 0; i < words.size(); ++i) {
-      cout << words.at(i) << " ";
+      cout << words.at(i) << ", ";
     }
     cout << endl;
   #endif
@@ -131,34 +136,34 @@ Base* Shell::parseCommand(string line) {
       continue;
     } else if(word == "(") {
       operators.push(word);
+      continue;
     } else if(word == ")") {
-      while(operators.top() != "(") {
+      if(operators.empty()) cout << "Operators are empty!?" << endl;
+      while(!operators.empty() && operators.top() != "(") {
         string op = operators.top();
         operators.pop();
         #ifdef DEBUG
-          cout << "Got operator: " << op << endl;
+          cout << "(1) Got operator: " << op << endl;
         #endif
 
-        Base *left;
-        Base *right;
-        right = popOrNull(operands);
-        left = popOrNull(operands);
+        Base *right = popOrNull(operands);
+        Base *left = popOrNull(operands);
         operands.push(applyOperator(op, left, right));
       }
+      if(!operators.empty() && operators.top() == "(") operators.pop();
     } else if(isOperator(word)) {
       #ifdef DEBUG
         cout << "Current word is operator: " << word << endl;
       #endif
-      while(!operators.empty()) {
+      while(!operators.empty() && operators.top() != "(") {
         string op = operators.top();
         operators.pop();
         #ifdef DEBUG
-          cout << "Got operator: " << op << endl;
+          cout << "(2) Got operator: " << op << endl;
         #endif
-        Base *left;
-        Base *right;
-        right = popOrNull(operands);
-        left = popOrNull(operands);
+
+        Base *right = popOrNull(operands);
+        Base *left = popOrNull(operands);
         operands.push(applyOperator(op, left, right));
       }
       operators.push(word);
@@ -167,14 +172,13 @@ Base* Shell::parseCommand(string line) {
   while(!operators.empty()) {
     string op = operators.top();
     #ifdef DEBUG
-      cout << "Got operator: " << op << endl;
+      cout << "(3) Got operator: " << op << endl;
     #endif
     operators.pop();
+    if(isParens(op)) continue;
 
-    Base *left;
-    Base *right;
-    right = popOrNull(operands);
-    left = popOrNull(operands);
+    Base *right = popOrNull(operands);
+    Base *left = popOrNull(operands);
     operands.push(applyOperator(op, left, right));
   }
 
@@ -186,9 +190,13 @@ Base* Shell::parseCommand(string line) {
 
 Base* Shell::applyOperator(const string& op, Base* left, Base* right) {
   if(!isOperator(op)) {
-    cout << "Invalid operator." << endl;
+    cout << "Invalid operator: " << op << endl;
     return nullptr;
   }
+  #ifdef DEBUG
+    if(left == nullptr) cout << "Left operator side is null" << endl;
+    if(right == nullptr) cout << "Left operator side is null" << endl;
+  #endif
   if(op == "||") {
     #ifdef DEBUG
       cout << "Created new OrConnector" << endl;

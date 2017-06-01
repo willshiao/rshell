@@ -4,17 +4,19 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$DIR"
 RES=""
 ./commented_command.sh
-RES="$RES$?"
+RES=$(($RES+$?))
 ./multi_command.sh
-RES="$RES$?"
+RES=$(($RES+$?))
 ./exit.sh
-RES="$RES$?"
+RES=$(($RES+$?))
 ./single_command.sh
-RES="$RES$?"
+RES=$(($RES+$?))
 ./test_command.sh
-RES="$RES$?"
+RES=$(($RES+$?))
+./precedence.sh
+RES=$(($RES+$?))
 
-if [[ "$RES" = "00000" ]]; then
+if [[ "$RES" = "0" ]]; then
   echo "All tests passed!"
   exit 0;
 else
