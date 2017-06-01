@@ -80,9 +80,9 @@ StatusCode TestCommand::runCommand(vector<string>& args) {
   if(args.at(1) == "-e") {
     status = (stat(args.at(2).c_str(), &buf) != -1);
   } else if(args.at(1) == "-d") {
-    status = false;
+    status = (stat(args.at(2).c_str(), &buf) != -1) && S_ISDIR(buf.st_mode);
   } else if(args.at(1) == "-f") {
-    status = false;
+    status = (stat(args.at(2).c_str(), &buf) != -1) && S_ISREG(buf.st_mode);
   } else {
     cout << "Invalid test command." << endl;
     return COMMAND_ERROR;
