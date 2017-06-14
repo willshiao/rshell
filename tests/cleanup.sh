@@ -2,4 +2,4 @@
 
 # Cleans up test files
 rm -rf testdir
-# rm -rf *_output.txt
+rm -rf *_output.txt

@@ -12,10 +12,10 @@ function finish() {
 
 ../bin/rshell < input/append_command.txt &> append_output.txt
 if cmp -s append_output.txt expected/append_output.txt; then
-  echo "Output Redirect Test Passed.";
+  echo "Append Redirect Test Passed.";
   finish 0
 else
-  echo "Output Redirect Test FAILED!";
+  echo "Append Redirect Test FAILED!";
   diff -y append_output.txt expected/append_output.txt;
   finish 1
 fi

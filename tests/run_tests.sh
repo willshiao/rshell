@@ -15,6 +15,14 @@ RES=$(($RES+$?))
 RES=$(($RES+$?))
 ./precedence.sh
 RES=$(($RES+$?))
+./input_redirect_test.sh
+RES=$(($RES+$?))
+./output_redirect_test.sh
+RES=$(($RES+$?))
+./append_redirect_test.sh
+RES=$(($RES+$?))
+./pipe_test.sh
+RES=$(($RES+$?))
 
 if [[ "$RES" = "0" ]]; then
   echo "All tests passed!"

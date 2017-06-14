@@ -11,10 +11,10 @@ $ ====================
 $ a
 d
 $ ====================
-$ a
+$ ls: invalid option -- 'j'
+Try 'ls --help' for more information.
+a
 e
 f
 b
-ls: invalid option -- 'j'
-Try 'ls --help' for more information.
 $ 

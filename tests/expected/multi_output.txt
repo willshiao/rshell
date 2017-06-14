@@ -29,16 +29,8 @@ $ ==========3==========
 $ No command "notacommand" found.
 "should run"
 $ ==========4==========
-$ No command "fakecommand" found.
-No command "fakecommand" found.
-a
-tree
-$ ==========5==========
-$ No command "fakecommand" found.
-No command "a" found.
-No command "b" found.
-c
-$ ==========6==========
+$ $ ==========5==========
+$ $ ==========6==========
 $ Invalid expression
 1
 2
