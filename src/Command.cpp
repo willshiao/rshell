@@ -63,17 +63,13 @@ StatusCode Command::runCommand(vector<string>& args) {
   }
   argv[args.size()] = nullptr;
 
-  if(!this->inputFile.empty()) {
-    #ifdef DEBUG
-      cout << "Creating input pipe" << endl;
-    #endif
-    pipe(this->inputPipe);
-  }
   if(!this->outputFile.empty()) {
     #ifdef DEBUG
       cout << "Creating output pipe" << endl;
     #endif
-    pipe(this->outputPipe);
+    if(pipe(this->outputPipe) == -1) {
+      cout << "Error creating output pipe" << endl;
+    }
   }
 
   pid_t pid = fork();
@@ -82,8 +78,11 @@ StatusCode Command::runCommand(vector<string>& args) {
   if(pid == 0) {  // Child process
     if(!this->inputFile.empty()) {  // Read input file
       #ifdef DEBUG
-        cout << "Reading from " << this->inputFile << endl;
+        cout << "Creating input pipe" << endl;
       #endif
+      if(pipe(this->inputPipe) == -1) {
+        cout << "Error creating input pipe" << endl;
+      }
       string fileContents = fileToString(this->inputFile);
 
       if(dup2(this->inputPipe[0], STDIN_FILENO) == -1) {
