@@ -1,13 +1,33 @@
 #include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <cstring>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 #include "header/Command.h"
 
 using namespace std;
+
+string fileToString(const string& fileName) {
+  ifstream fs{fileName};
+  ostringstream str_stream;
+
+  if(fs.fail()) {
+    cout << "Error opening " << fileName << endl;
+  }
+
+  fs >> str_stream.rdbuf();
+  if (fs.fail() && !fs.eof()) {
+    cout << "Error reading " << fileName << endl;
+  }
+
+  return str_stream.str();
+}
 
 bool Command::isEmpty() {
   if(this->args.size() == 0) return true;
@@ -46,7 +66,7 @@ StatusCode Command::runCommand(vector<string>& args) {
 
   if(hasPipe()) {
     cout << "Output redirection detected" << endl;
-    if(pipe(this->pipefd) == -1) {
+    if(pipe(this->pipefd) == -1) {  // File descriptor for pipe, [0] is read and [1] is write
       cout << "Error creating pipe." << endl;
       delete[] argv;
       return IO_ERROR;
@@ -54,6 +74,20 @@ StatusCode Command::runCommand(vector<string>& args) {
   }
 
   if(pid == 0) {  // Child process
+    if(!this->inputFile.empty()) {  // Read input file
+      #ifdef DEBUG
+        cout << "Reading from " << this->inputFile << endl;
+      #endif
+      string fileContents = fileToString(this->inputFile);
+
+      #ifdef DEBUG
+        cout << "Got file contents: " << fileContents << endl << endl;
+      #endif
+
+      dup2(this->pipefd[0], STDIN_FILENO);
+      write(this->pipefd[1], fileContents.c_str(), fileContents.size());
+      close(this->pipefd[1]);
+    }
     if(execvp(argv[0], argv) < 0) {
       cout << "No command \"" << argv[0] << "\" found." << endl;
       exit(1);
