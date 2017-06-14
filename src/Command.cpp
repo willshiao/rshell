@@ -23,9 +23,9 @@ StatusCode Command::eval() {
   if(this->args.at(0) == "exit") {
     exit(0);
   } else if(this->args.at(0) == "test") {
-    return this->runCommand(this->args);
+    return (new TestCommand(this->args))->eval();
   }
-  StatusCode s = Command::runCommand(this->args);
+  StatusCode s = this->runCommand(this->args);
   #ifdef DEBUG
     if(s != SUCCESS) cout << "Invalid command." << endl;
   #endif
@@ -99,4 +99,8 @@ StatusCode TestCommand::runCommand(vector<string>& args) {
   }
   cout << (status ? "(True)" : "(False)") << endl;
   return (status ? SUCCESS : IO_ERROR);
+}
+
+StatusCode TestCommand::eval() {
+  return this->runCommand(this->args);
 }

@@ -54,8 +54,10 @@ class NullCommand : public Command {
 
 class TestCommand : public Command {
  public:
-  StatusCode runCommand(vector<string>& args);
   explicit TestCommand(vector<string> a) : Command(a) { }
+
+  StatusCode runCommand(vector<string>& args);
+  virtual StatusCode eval();
 };
 
 #endif
