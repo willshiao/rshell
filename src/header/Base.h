@@ -5,6 +5,10 @@
 
 class Base {
  public:
+  std::string inputString;
+  std::string outputString;
+  bool shouldPrint = false;
+
   virtual StatusCode eval() = 0;
   virtual bool isEmpty() = 0;
 };

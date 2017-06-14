@@ -13,6 +13,7 @@
 #include "header/CommandConnector.h"
 #include "header/AndConnector.h"
 #include "header/OrConnector.h"
+#include "header/PipeConnector.h"
 
 using namespace std;
 
@@ -52,6 +53,7 @@ StatusCode Shell::run() {
     if(line.size() == 0) continue;
 
     Base* cmd = parseCommand(line);
+    cmd->shouldPrint = true;
     cmd->eval();
   }
   return SUCCESS;
@@ -248,11 +250,19 @@ Base* Shell::applyOperator(const string& op, Base* left, Base* right) {
     return leftCommand;
   }
 
+  if(op == "|") {
+    #ifdef DEBUG
+      cout << "Applying pipe operator" << endl;
+    #endif
+
+    return new PipeConnector(left, right);
+  }
+
   return nullptr;  // Should never happen
 }
 
 bool Shell::isOperator(const string &s) {
-  return s == "||" || s == "&&" || s == ";" || s == "<" || s == ">" || s == ">>";
+  return s == "||" || s == "&&" || s == ";" || s == "<" || s == ">" || s == ">>" || s == "|";
 }
 
 bool Shell::isParens(const string &s) {
@@ -269,6 +279,6 @@ bool Shell::hasLowerPrecedence(const std::string &s1, const std::string &s2) {
 
 unsigned Shell::getPrecedence(const std::string &s) {
   if(isParens(s)) return 0;
-  if(s == "||" || s == "&&" || s == ";") return 1;
+  if(s == "||" || s == "&&" || s == ";" || s == "|") return 1;
   return 2;
 }

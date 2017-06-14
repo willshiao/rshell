@@ -62,13 +62,23 @@ StatusCode Command::runCommand(vector<string>& args) {
     argv[i] = const_cast<char*>(args.at(i).c_str());
   }
   argv[args.size()] = nullptr;
+  int internalPipeOut[2];
 
   if(!this->outputFile.empty()) {
     #ifdef DEBUG
       cout << "Creating output pipe" << endl;
     #endif
+
     if(pipe(this->outputPipe) == -1) {
       cout << "Error creating output pipe" << endl;
+    }
+  } else {
+    #ifdef DEBUG
+      cout << "Creating internalPipeOut" << endl;
+    #endif
+
+    if(pipe(internalPipeOut) == -1) {
+      cout << "Failed to create internalPipeOut" << endl;
     }
   }
 
@@ -90,6 +100,14 @@ StatusCode Command::runCommand(vector<string>& args) {
       }
       write(this->inputPipe[1], fileContents.c_str(), fileContents.size());
       close(this->inputPipe[1]);
+    } else if(!this->inputString.empty()) {
+      int internalPipeIn[2];
+      pipe(internalPipeIn);
+
+      dup2(internalPipeIn[0], STDIN_FILENO);
+      write(internalPipeIn[1], this->inputString.c_str(), this->inputString.size());
+      close(internalPipeIn[0]);
+      close(internalPipeIn[1]);
     }
 
     if(!this->outputFile.empty()) {
@@ -98,6 +116,15 @@ StatusCode Command::runCommand(vector<string>& args) {
         cout << "Error creating output pipe in child" << endl;
       }
       close(this->outputPipe[1]);
+    } else {
+      #ifdef DEBUG
+        cout << "Duplicating STDOUT to internalPipeOut" << endl;
+      #endif
+      close(internalPipeOut[0]);
+      if(dup2(internalPipeOut[1], STDOUT_FILENO) == -1) {  // STDOUT -> internalPipeIn
+        cout << "Error calling dup2() on internalPipeOut in child" << endl;
+      }
+      close(internalPipeOut[1]);
     }
 
     if(execvp(argv[0], argv) < 0) {
@@ -128,7 +155,30 @@ StatusCode Command::runCommand(vector<string>& args) {
         ofs << buf;
       }
       close(this->outputPipe[0]);
-      cout << endl;
+    } else {
+      close(internalPipeOut[1]);
+
+      #ifdef DEBUG
+        cout << "Attempting pipe stdout to this->outputString" << endl;
+      #endif
+      stringstream ss;
+      char buf[BUFFER_SIZE];
+
+      ssize_t bytesRead;
+      while((bytesRead = read(internalPipeOut[0], &buf, BUFFER_SIZE)) > 0) {
+        if(bytesRead < BUFFER_SIZE) buf[bytesRead] = '\0';
+        ss << buf;
+      }
+      close(internalPipeOut[0]);
+      this->outputString = ss.str();
+
+      if(this->shouldPrint) {
+        cout << this->outputString << endl;
+      }
+
+      #ifdef DEBUG
+        cout << "Set output to: " << this->outputString << endl << endl << endl;
+      #endif
     }
 
     waitpid(pid, &commandStatus, 0);
