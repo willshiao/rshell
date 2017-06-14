@@ -11,6 +11,8 @@
 
 #include "header/Command.h"
 
+#define BUFFER_SIZE 100
+
 using namespace std;
 
 string fileToString(const string& fileName) {
@@ -61,17 +63,21 @@ StatusCode Command::runCommand(vector<string>& args) {
   }
   argv[args.size()] = nullptr;
 
+  if(!this->inputFile.empty()) {
+    #ifdef DEBUG
+      cout << "Creating input pipe" << endl;
+    #endif
+    pipe(this->inputPipe);
+  }
+  if(!this->outputFile.empty()) {
+    #ifdef DEBUG
+      cout << "Creating output pipe" << endl;
+    #endif
+    pipe(this->outputPipe);
+  }
+
   pid_t pid = fork();
   int commandStatus;
-
-  if(hasPipe()) {
-    cout << "Output redirection detected" << endl;
-    if(pipe(this->pipefd) == -1) {  // File descriptor for pipe, [0] is read and [1] is write
-      cout << "Error creating pipe." << endl;
-      delete[] argv;
-      return IO_ERROR;
-    }
-  }
 
   if(pid == 0) {  // Child process
     if(!this->inputFile.empty()) {  // Read input file
@@ -80,20 +86,52 @@ StatusCode Command::runCommand(vector<string>& args) {
       #endif
       string fileContents = fileToString(this->inputFile);
 
-      #ifdef DEBUG
-        cout << "Got file contents: " << fileContents << endl << endl;
-      #endif
-
-      dup2(this->pipefd[0], STDIN_FILENO);
-      write(this->pipefd[1], fileContents.c_str(), fileContents.size());
-      close(this->pipefd[1]);
+      if(dup2(this->inputPipe[0], STDIN_FILENO) == -1) {
+        cout << "Error creating input pipe in child" << endl;
+      }
+      write(this->inputPipe[1], fileContents.c_str(), fileContents.size());
+      close(this->inputPipe[1]);
     }
+
+    if(!this->outputFile.empty()) {
+      close(this->outputPipe[0]);
+      if(dup2(this->outputPipe[1], STDOUT_FILENO) == -1) {
+        cout << "Error creating output pipe in child" << endl;
+      }
+      close(this->outputPipe[1]);
+    }
+
     if(execvp(argv[0], argv) < 0) {
       cout << "No command \"" << argv[0] << "\" found." << endl;
       exit(1);
     }
     exit(0);
   } else if(pid > 0) {  // Parent process
+    if(!this->outputFile.empty()) {
+      close(this->outputPipe[1]);
+
+      char buf[BUFFER_SIZE];
+      ofstream ofs;
+
+      if(this->appendOutput) {
+        ofs.open(this->outputFile.c_str(), ios::app);
+      } else {
+        ofs.open(this->outputFile.c_str());
+      }
+
+      #ifdef DEBUG
+        cout << "Writing to " << this->outputFile << endl;
+      #endif
+
+      ssize_t bytesRead;
+      while((bytesRead = read(this->outputPipe[0], &buf, BUFFER_SIZE)) > 0) {
+        if(bytesRead < BUFFER_SIZE) buf[bytesRead] = '\0';
+        ofs << buf;
+      }
+      close(this->outputPipe[0]);
+      cout << endl;
+    }
+
     waitpid(pid, &commandStatus, 0);
     delete[] argv;
 

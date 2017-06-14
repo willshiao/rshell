@@ -15,7 +15,8 @@ class Command : public Base {
   bool appendOutput;
 
  public:
-  int pipefd[2];  // File descriptor for pipe, [0] is read and [1] is write
+  int inputPipe[2];  // File descriptor for pipe, [0] is read and [1] is write
+  int outputPipe[2];
 
   StatusCode runCommand(vector<string>& args);
   Command() {}

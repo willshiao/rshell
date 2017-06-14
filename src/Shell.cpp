@@ -235,11 +235,24 @@ Base* Shell::applyOperator(const string& op, Base* left, Base* right) {
     return leftCommand;
   }
 
+  if(op == ">" || op == ">>") {
+    Command *leftCommand = static_cast<Command*>(left);
+    Command *rightCommand = static_cast<Command*>(right);
+
+    #ifdef DEBUG
+      cout << "Applying output redirector" << endl;
+    #endif
+
+    leftCommand->setOutputFile(rightCommand->getArgs().front());
+    leftCommand->setAppend(op == ">>");
+    return leftCommand;
+  }
+
   return nullptr;  // Should never happen
 }
 
 bool Shell::isOperator(const string &s) {
-  return s == "||" || s == "&&" || s == ";" || s == "<";
+  return s == "||" || s == "&&" || s == ";" || s == "<" || s == ">" || s == ">>";
 }
 
 bool Shell::isParens(const string &s) {
