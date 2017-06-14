@@ -13,7 +13,6 @@
 #include "header/CommandConnector.h"
 #include "header/AndConnector.h"
 #include "header/OrConnector.h"
-#include "header/InputRedirector.h"
 
 using namespace std;
 
@@ -221,10 +220,22 @@ Base* Shell::applyOperator(const string& op, Base* left, Base* right) {
     return new CommandConnector(left, right);
   }
 
-  #ifdef DEBUG
-    cout << "Created new InputRedirector" << endl;
-  #endif
-  return new InputRedirector(left, right);
+  if(op == "<") {
+    #ifdef DEBUG
+      cout << "Created new InputRedirector" << endl;
+    #endif
+    Command *leftCommand = static_cast<Command*>(left);
+    Command *rightCommand = static_cast<Command*>(right);
+
+    #ifdef DEBUG
+      cout << "Piping input from " << rightCommand->getArgs().front() << endl;
+    #endif
+
+    leftCommand->setInputFile(rightCommand->getArgs().front());
+    return leftCommand;
+  }
+
+  return nullptr;  // Should never happen
 }
 
 bool Shell::isOperator(const string &s) {
