@@ -1,0 +1,2 @@
+cat < testdir/file1
+exit

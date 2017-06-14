@@ -1,0 +1,5 @@
+$ this is a test file.
+the contents of this file are for testing purposes.
+i like to test things.
+this file is created for cs100.
+$ 

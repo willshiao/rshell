@@ -6,9 +6,9 @@ ls testdir
 echo ==========3==========
 notacommand || echo "should run"
 echo ==========4==========
-fakecommand || fakecommand || echo a && echo tree
+#fakecommand || fakecommand || echo a && echo tree
 echo ==========5==========
-fakecommand;; a || b || echo c
+#fakecommand;; a || b || echo c
 echo ==========6==========
 echo 1; echo 2; echo 34; echo 5;;; echo 6;;; echo 7;
 echo ==========7==========

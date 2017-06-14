@@ -1,0 +1,3 @@
+echo NewContent >> testdir/file1
+cat testdir/file1
+exit

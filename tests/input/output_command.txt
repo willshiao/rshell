@@ -1,0 +1,3 @@
+cat testdir/file1 > testdir/file99
+ls testdir
+exit
