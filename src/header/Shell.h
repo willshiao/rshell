@@ -15,6 +15,8 @@ class Shell {
   static bool isOperator(const std::string &s);
   static bool isParens(const std::string &s);
   static bool isSymbol(const std::string &s);
+  static bool hasLowerPrecedence(const std::string &s1, const std::string &s2);
+  static unsigned getPrecedence(const std::string &s);
 };
 
 #endif

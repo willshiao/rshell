@@ -13,6 +13,7 @@
 #include "header/CommandConnector.h"
 #include "header/AndConnector.h"
 #include "header/OrConnector.h"
+#include "header/InputRedirector.h"
 
 using namespace std;
 
@@ -151,13 +152,17 @@ Base* Shell::parseCommand(string line) {
         operands.push(applyOperator(op, left, right));
       }
       if(!operators.empty() && operators.top() == "(") operators.pop();
+
     } else if(isOperator(word)) {
       #ifdef DEBUG
         cout << "Current word is operator: " << word << endl;
       #endif
-      while(!operators.empty() && operators.top() != "(") {
+
+      while(!operators.empty() && operators.top() != "("
+          && !hasLowerPrecedence(operators.top(), word)) {
         string op = operators.top();
         operators.pop();
+
         #ifdef DEBUG
           cout << "(2) Got operator: " << op << endl;
         #endif
@@ -202,20 +207,28 @@ Base* Shell::applyOperator(const string& op, Base* left, Base* right) {
       cout << "Created new OrConnector" << endl;
     #endif
     return new OrConnector(left, right);
-  } else if(op == "&&") {
+  }
+  if(op == "&&") {
     #ifdef DEBUG
       cout << "Created new AndConnector" << endl;
     #endif
     return new AndConnector(left, right);
   }
+  if(op == ";") {
+    #ifdef DEBUG
+      cout << "Created new CommandConnector" << endl;
+    #endif
+    return new CommandConnector(left, right);
+  }
+
   #ifdef DEBUG
-    cout << "Created new CommandConnector" << endl;
+    cout << "Created new InputRedirector" << endl;
   #endif
-  return new CommandConnector(left, right);
+  return new InputRedirector(left, right);
 }
 
 bool Shell::isOperator(const string &s) {
-  return s == "||" || s == "&&" || s == ";";
+  return s == "||" || s == "&&" || s == ";" || s == "<";
 }
 
 bool Shell::isParens(const string &s) {
@@ -224,4 +237,14 @@ bool Shell::isParens(const string &s) {
 
 bool Shell::isSymbol(const string &s) {
   return Shell::isOperator(s) || Shell::isParens(s);
+}
+
+bool Shell::hasLowerPrecedence(const std::string &s1, const std::string &s2) {
+  return getPrecedence(s1) < getPrecedence(s2);
+}
+
+unsigned Shell::getPrecedence(const std::string &s) {
+  if(isParens(s)) return 0;
+  if(s == "||" || s == "&&" || s == ";") return 1;
+  return 2;
 }

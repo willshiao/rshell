@@ -23,7 +23,7 @@ StatusCode Command::eval() {
   if(this->args.at(0) == "exit") {
     exit(0);
   } else if(this->args.at(0) == "test") {
-    return TestCommand::runCommand(this->args);
+    return this->runCommand(this->args);
   }
   StatusCode s = Command::runCommand(this->args);
   #ifdef DEBUG
@@ -44,6 +44,15 @@ StatusCode Command::runCommand(vector<string>& args) {
   pid_t pid = fork();
   int commandStatus;
 
+  if(hasPipe()) {
+    cout << "Output redirection detected" << endl;
+    if(pipe(this->pipefd) == -1) {
+      cout << "Error creating pipe." << endl;
+      delete[] argv;
+      return IO_ERROR;
+    }
+  }
+
   if(pid == 0) {  // Child process
     if(execvp(argv[0], argv) < 0) {
       cout << "No command \"" << argv[0] << "\" found." << endl;
@@ -53,6 +62,7 @@ StatusCode Command::runCommand(vector<string>& args) {
   } else if(pid > 0) {  // Parent process
     waitpid(pid, &commandStatus, 0);
     delete[] argv;
+
     if(WEXITSTATUS(commandStatus) == 0) return SUCCESS;
     #ifdef DEBUG
       cout << "Unknown error!" << endl;
