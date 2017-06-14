@@ -136,7 +136,8 @@ StatusCode Command::runCommand(vector<string>& args) {
     if(!this->outputFile.empty()) {
       close(this->outputPipe[1]);
 
-      char buf[BUFFER_SIZE];
+      // char buf[BUFFER_SIZE];
+      char buf;
       ofstream ofs;
 
       if(this->appendOutput) {
@@ -149,12 +150,12 @@ StatusCode Command::runCommand(vector<string>& args) {
         cout << "Writing to " << this->outputFile << endl;
       #endif
 
-      ssize_t bytesRead;
-      while((bytesRead = read(this->outputPipe[0], &buf, BUFFER_SIZE)) > 0) {
-        if(bytesRead < BUFFER_SIZE) buf[bytesRead] = '\0';
+      ssize_t bytesRead = 0;
+      while((bytesRead = read(this->outputPipe[0], &buf, 1)) > 0) {
+        // if(bytesRead < BUFFER_SIZE) buf[bytesRead] = '\0';
         ofs << buf;
       }
-      close(this->outputPipe[0]);
+      // close(this->outputPipe[0]);
     } else {
       close(internalPipeOut[1]);
 
@@ -162,22 +163,23 @@ StatusCode Command::runCommand(vector<string>& args) {
         cout << "Attempting pipe stdout to this->outputString" << endl;
       #endif
       stringstream ss;
-      char buf[BUFFER_SIZE];
+      // char buf[BUFFER_SIZE];
+      char buf;
 
-      ssize_t bytesRead;
-      while((bytesRead = read(internalPipeOut[0], &buf, BUFFER_SIZE)) > 0) {
-        if(bytesRead < BUFFER_SIZE) buf[bytesRead] = '\0';
+      ssize_t bytesRead = 0;
+      while((bytesRead = read(internalPipeOut[0], &buf, 1)) > 0) {
+        // if(bytesRead < BUFFER_SIZE) buf[bytesRead] = '\0';
         ss << buf;
       }
       close(internalPipeOut[0]);
       this->outputString = ss.str();
 
       if(this->shouldPrint) {
-        cout << this->outputString << endl;
+        cout << this->outputString;
       }
 
       #ifdef DEBUG
-        cout << "Set output to: " << this->outputString << endl << endl << endl;
+        // cout << "Set output to: " << this->outputString << endl << endl << endl;
       #endif
     }
 
